@@ -31,11 +31,11 @@ const router = express.Router();
 /**
  * Registration Flow
  */
-// Send registration OTP
+// Send registration OTP (receives all registration data, validates, then sends OTP)
 router.post(
   '/send-registration-otp',
   registrationRateLimiter,
-  validateRegistration.slice(0, 4), // Only validate email and username for OTP sending
+  validateRegistration, // Validate all registration fields
   handleValidationErrors,
   sendRegistrationOTP
 );

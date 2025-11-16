@@ -127,11 +127,20 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
   submitBtn.textContent = 'Sending OTP...';
 
   try {
-    // Send registration request to generate OTP
+    // Send ALL registration data to backend, then backend sends OTP
     const res = await fetch(`${API_BASE_URL}/api/auth/send-registration-otp`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, email })
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+        first_name,
+        last_name,
+        birthday,
+        contact: contact_number,
+        home_address: homeAddress
+      })
     });
 
     const result = await res.json();
