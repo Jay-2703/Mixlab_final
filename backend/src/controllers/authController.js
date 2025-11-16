@@ -16,9 +16,20 @@ import { notifyAdmins } from '../services/notificationService.js';
  */
 export const sendRegistrationOTP = async (req, res) => {
   try {
-    const { email, username } = req.body;
+    // Receive ALL registration data when Register button is clicked
+    const { email, username, password, first_name, last_name, birthday, contact, home_address } = req.body;
 
-    // Check if username already exists
+    // Validate password strength
+    const passwordValidation = validatePasswordStrength(password);
+    if (!passwordValidation.valid) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password does not meet requirements',
+        errors: passwordValidation.errors
+      });
+    }
+
+    // Check if username or email already exists
     const [existingUser] = await query(
       'SELECT id FROM users WHERE username = ? OR email = ?',
       [username, email]
